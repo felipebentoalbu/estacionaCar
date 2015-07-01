@@ -21,6 +21,7 @@ public class Cliente {
 	private String bairro;
 	private Date dataNascimento;
 
+	// teste
 	public Cliente() {
 	}
 
