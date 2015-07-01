@@ -1,0 +1,118 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	template="/pages/template.xhtml">
+
+	<ui:define name="conteudo">
+		<h:form id="frm">
+			<h2>Cadastro de Pedidos</h2>
+
+			<p:fieldset legend="Filtros" toggleable="true" collapsed="true">
+
+				<ui:remove>
+					<h:panelGroup>
+						<p:inputText id="filtro01" value="#{pedidoMB.filtro}" />
+					</h:panelGroup>
+				</ui:remove>
+				<h:outputText value="Cliente:" />
+				<p:selectOneMenu value="#{pedidoMB.pedido.cliente.id}"
+					converter="conversorCliente">
+					<f:selectItems value="#{pedidoMB.listaCli}" var="cli"
+						itemValue="#{cli}" itemLabel="#{cli.nome}" />
+				</p:selectOneMenu>
+			</p:fieldset>
+
+			<p:messages />
+			<h:panelGrid columns="2" id="panel">
+				<h:outputText value="Número: " />
+				<h:panelGroup>
+					<p:inputText id="inNumero" value="#{pedidoMB.pedido.numero}"
+						required="true" requiredMessage="Nome Obrigatório" />
+					<p:message for="inNumero" />
+				</h:panelGroup>
+
+				<h:outputText value="Cliente:" />
+				<p:selectOneMenu value="#{pedidoMB.pedido.cliente}"
+					converter="conversorCliente">
+					<f:selectItems value="#{pedidoMB.listaCli}" var="cli"
+						itemValue="#{cli}" itemLabel="#{cli.nome}" />
+				</p:selectOneMenu>
+
+			</h:panelGrid>
+
+			<h:panelGrid columns="2">
+				<p:fieldset>
+					<h:panelGrid columns="2">
+						<h:outputText value="Add Produto:" />
+						<p:selectOneMenu value="#{pedidoMB.produto}"
+							converter="conversorProduto">
+							<f:selectItems value="#{pedidoMB.listaProd}" var="prod"
+								itemValue="#{prod}" itemLabel="#{prod.nome}" />
+						</p:selectOneMenu>
+						<h:outputText value="Qtd.:" />
+						<h:inputText value="#{pedidoMB.pedidoItem.quantidade}" />
+						<h:outputText value="Valor:" />
+						<h:inputText value="#{pedidoMB.pedidoItem.valor}" />
+
+						<h:commandButton value="Add" action="#{pedidoMB.addProduto}"
+							styleClass="btn">
+							<f:ajax execute="@form" render="@form" />
+						</h:commandButton>
+						<h:commandButton onclick="PF('dialogItens').show();"
+							value="Exibir Itens" styleClass="btn">
+
+							<f:ajax execute="@this" render=":frm:tabela" />
+						</h:commandButton>
+					</h:panelGrid>
+				</p:fieldset>
+			</h:panelGrid>
+			<h:commandButton value="Salvar" action="#{pedidoMB.salvar}"
+				styleClass="btn">
+				<f:ajax execute="@form" render="@form" />
+			</h:commandButton>
+
+			<p:dataTable value="#{pedidoMB.pedidos}" var="ped" paginator="true"
+				rowsPerPageTemplate="2,5,10">
+				<p:column>
+					<f:facet name="header">Número</f:facet>
+					#{ped.numero}
+				</p:column>
+				<p:column>
+					<f:facet name="header">Cliente</f:facet>
+					#{ped.cliente.nome}
+				</p:column>
+				<p:column>
+					<h:commandButton value="Editar" styleClass="btn">
+						<f:setPropertyActionListener value="#{ped}"
+							target="#{pedidoMB.pedido}" />
+						<f:ajax execute="@this" render="@form" />
+					</h:commandButton>
+					<h:commandButton action="#{pedidoMB.excluir}" value="Excluir"
+						styleClass="btn">
+						<f:setPropertyActionListener value="#{ped}"
+							target="#{pedidoMB.pedido}" />
+						<f:ajax execute="@this" render="@form" />
+					</h:commandButton>
+				</p:column>
+			</p:dataTable>
+
+			<p:dialog widgetVar="dialogItens" modal="true" dynamic="true">
+				<p:dataTable value="#{pedidoMB.pedido.listaItens}" var="item"
+					id="tabela">
+					<p:column headerText="Produto">
+						#{item.produto.nome}
+					</p:column>
+					<p:column headerText="Quantidade">
+						#{item.quantidade}
+					</p:column>
+					<p:column headerText="Valor">
+						#{item.valor}
+					</p:column>
+				</p:dataTable>
+			</p:dialog>
+		</h:form>
+	</ui:define>
+</ui:composition>

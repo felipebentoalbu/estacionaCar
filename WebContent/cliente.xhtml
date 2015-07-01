@@ -1,0 +1,81 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets" template="/template.xhtml">
+
+	<ui:define name="conteudo">
+		<h:form id="frm">
+			<p:messages />
+			<h:panelGrid columns="2" id="panel">
+				<h:outputText value="CPF / CNPJ: " />
+				<h:panelGroup>
+					<p:inputText id="txtCpfCnpj" value="#{clienteMB.cliente.cpfCnpj}"
+						required="true" requiredMessage="Informe CPF ou CNPJ." />
+					<p:message for="txtCpfCnpj" />
+					<p:message for="txtCpfCnpj" />
+				</h:panelGroup>
+
+				<h:outputText value="Nome: " />
+				<h:panelGroup>
+					<p:inputText id="txtNome" value="#{clienteMB.cliente.nomeCliente}"
+						required="true" requiredMessage="Nome Obrigatório" />
+					<p:message for="txtNome" />
+				</h:panelGroup>
+
+				<h:outputText value="Telefone: " />
+				<h:panelGroup>
+					<p:inputMask id="txtTelefone"
+						value="#{clienteMB.cliente.telefoneCliente}" mask="(99) 9999-9999" />
+					<p:message for="txtTelefone" />
+				</h:panelGroup>
+
+				<h:outputText value="Endereço: " />
+				<h:panelGroup>
+					<p:inputText id="txtEndereco" value="#{clienteMB.cliente.endereco}"
+						required="true" requiredMessage="Nome Obrigatório" />
+					<p:message for="txtEndereco" />
+				</h:panelGroup>
+
+				<h:outputText value="Bairro: " />
+				<h:panelGroup>
+					<p:inputText id="txtBairro" value="#{clienteMB.cliente.bairro}"
+						required="true" requiredMessage="Nome Obrigatório" />
+					<p:message for="txtBairro" />
+				</h:panelGroup>
+
+				<h:commandButton value="Salvar" action="#{clienteMB.salvar}"
+					styleClass="btn">
+					<f:ajax execute="@form" render="@form" />
+				</h:commandButton>
+
+				<p:dataTable value="#{clienteMB.clientes}" var="cli"
+					paginator="true" rowsPerPageTemplate="2,5,10">
+					<p:column>
+						<f:facet name="header">Nome</f:facet>
+					#{cli.cpfCnpj}
+				</p:column>
+					<p:column>
+						<f:facet name="header">Login</f:facet>
+					#{cli.nomeCliente}
+				</p:column>
+					<p:column>
+						<h:commandButton value="Editar" styleClass="btn">
+							<f:setPropertyActionListener value="#{cli}"
+								target="#{clienteMB.cliente}" />
+							<f:ajax execute="@this" render="@form" />
+						</h:commandButton>
+
+						<h:commandButton action="#{clienteMB.excluir}" value="Excluir"
+							styleClass="btn" process="@this" update="@form">
+							<f:setPropertyActionListener value="#{cli}"
+								target="#{clienteMB.cliente}" />
+							<f:ajax execute="@this" render="@form" />
+						</h:commandButton>
+					</p:column>
+				</p:dataTable>
+			</h:panelGrid>
+		</h:form>
+	</ui:define>
+</ui:composition>

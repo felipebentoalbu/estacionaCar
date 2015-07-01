@@ -1,0 +1,59 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets" template="/template.xhtml">
+
+	<ui:define name="conteudo">
+		<h:form id="form">
+			<p:messages />
+			<h:panelGrid columns="2" id="panel">
+				<h:outputText value="Placa: " />
+				<h:panelGroup>
+					<p:inputMask id="txtPlaca"
+						value="#{veiculoMB.veiculo.placaVeiculo}" mask="aaa-9999" />
+					<p:message for="txtPlaca" />
+				</h:panelGroup>
+
+				<h:outputText value="Cliente:" />
+				<p:selectOneMenu value="#{veiculoMB.veiculo.cliente.id}"
+					converter="conversorCliente">
+					<f:selectItems value="#{veiculoMB.listaCli}" var="cli"
+						itemValue="#{cli}" itemLabel="#{cli.nomeCliente}" />
+				</p:selectOneMenu>
+
+
+				<h:commandButton value="Salvar" action="#{veiculoMB.salvar}"
+					styleClass="btn">
+					<f:ajax execute="@form" render="@form" />
+				</h:commandButton>
+
+				<p:dataTable value="#{veiculoMB.veiculos}" var="vei"
+					paginator="true" rowsPerPageTemplate="2,5,10">
+					<p:column>
+						<f:facet name="header">Placa</f:facet>
+					#{vei.placaVeiculo}
+				</p:column>
+					<p:column>
+						<f:facet name="header">Cliente</f:facet>
+					#{vei.cliente.nomeCliente}
+				</p:column>
+					<p:column>
+						<h:commandButton value="Editar" styleClass="btn">
+							<f:setPropertyActionListener value="#{vei}"
+								target="#{veiculoMB.veiculo}" />
+							<f:ajax execute="@this" render="@form" />
+						</h:commandButton>
+						<h:commandButton action="#{veiculoMB.excluir}" value="Excluir"
+							styleClass="btn">
+							<f:setPropertyActionListener value="#{vei}"
+								target="#{veiculoMB.veiculo}" />
+							<f:ajax execute="@this" render="@form" />
+						</h:commandButton>
+					</p:column>
+				</p:dataTable>
+			</h:panelGrid>
+		</h:form>
+	</ui:define>
+</ui:composition>

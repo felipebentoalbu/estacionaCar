@@ -1,0 +1,42 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core">
+<h:head>
+	<h:outputStylesheet library="css" name="bootstrap.css" />
+</h:head>
+<h:body>
+
+	<h:form>
+		<h:messages />
+		<h:panelGrid columns="2" >
+			<h:commandLink value="Port." action="#{i18nMB.mudarIdioma}">
+				<h:graphicImage url="img/br.png" width="30" height="30"/>
+				<f:setPropertyActionListener target="#{i18nMB.linguagem}" value="pt" />
+				<f:setPropertyActionListener target="#{i18nMB.pais}" value="BR" />
+				<f:ajax execute="@this" render="@form" />
+			</h:commandLink>
+			<h:commandLink value="Eng." action="#{i18nMB.mudarIdioma}">
+				<h:graphicImage url="img/us.png" width="30" height="30"/>
+				<f:setPropertyActionListener target="#{i18nMB.linguagem}" value="en" />
+				<f:setPropertyActionListener target="#{i18nMB.pais}" value="US" />
+				<f:ajax execute="@this" render="@form" />
+			</h:commandLink>
+		</h:panelGrid>
+		<br/>
+		<h:panelGrid columns="3">
+			<h:outputText value="Login: " />
+			<h:inputText value="#{autenticacaoMB.login}" id="inLogin"
+				required="true" requiredMessage="Obigatório!" />
+			<h:message for="inLogin" />
+			<h:outputText value="#{i18n.senha}: " />
+			<h:inputSecret value="#{autenticacaoMB.senha}" id="inSenha"
+				required="true" requiredMessage="Obigatório!" />
+			<h:message for="inSenha" />
+			<h:commandButton styleClass="btn" action="#{autenticacaoMB.logar}"
+				value="#{i18n.entrar}" />
+		</h:panelGrid>
+
+	</h:form>
+</h:body>
+</html>
